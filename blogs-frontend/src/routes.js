@@ -6,7 +6,8 @@ import Home from './components/Home';
 import Blog from './components/Blog';
 import Search from './components/Search';
 import About from './components/About';
-import Post from './components/Post';
+import Write from './components/Write';
+import Picture from './components/Picture';
 
 export default function(){
   return(
@@ -16,7 +17,8 @@ export default function(){
         <Route path='blog' component={Blog} />
         <Route path='search' component={Search} />
         <Route path='about' component={About} />
-        <Route path='post/:title' component={Post} />
+        <Route path='write' component={Write} />
+        <Route path='picture' component={Picture} />
       </Route>
     </Router>
   )

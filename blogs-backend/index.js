@@ -1,24 +1,35 @@
-t express = require('express');
-const app = express();
+var express = require('express');
+var app = express();
+var port = require('./config').port;
+var mongoose = require('mongoose');
+var uri = require('./config').uri;
+var User = require('./models/user.js');
+var routes = require('./routes');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+app.use(morgan('dev'));
 
-const cors = require('cors');
-app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-const mongoose = require('mongoose');
-let User = require('./moduls/user');
-mongoose.connect('mongodb://localhost:27017/react-express-demo');
 
-let db = mongoose.connection;
-db.on('error', console.log);
-db.once('open', function() {
-  console.log('success!')
+mongoose.connect(uri);
+
+var db = mongoose.connection;
+db.on('error', function(err){
+  console.log('connection failed!', err);
 });
-app.get('/users',function(req,res){
-  User.find().exec(function(err, users) {
-    res.json({users});
-  })
-})
+db.once('open', function() {
+  console.log('success!');
+  var user = new User({
+    username: 'mahe',
+    password: '654321'
+  });
+  user.save();
+});
 
-app.listen(3000,function(){
-  console.log('running on port 3000...');
+routes(app);
+
+app.listen(port,function(){
+  console.log('running on port ' + port + '...');
 })
